@@ -77,8 +77,6 @@ std::vector<int> MVC(int id, ParGreedy &graph, std::vector<int> &Visited, int de
 		mtx.unlock(); 
 	}
 
-	/*if (VC1.size() >= VC2.size()) return VC2;
-	else return VC1;*/
 	if (VC1.empty())	return VC2;
 	else if (VC2.empty())	return VC1;
 	else if (VC1.empty() && VC2.empty())	return {};
