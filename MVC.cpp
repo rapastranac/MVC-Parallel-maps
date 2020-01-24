@@ -1,7 +1,7 @@
 #include"main.h"
 
-std::vector<int> MVC(int id, ParGreedy &graph, std::vector<int> &Visited, int depth) {
-	size_t sze = graph.getGraphSize(); //Size of adjacency list, if sze = 0; then there is no more edges in graph
+std::vector<int> MVC(int id, ParGreedy & gLeft, std::vector<int> &Visited, int depth) {
+	size_t sze = gLeft.getGraphSize(); //Size of adjacency list, if sze = 0; then there is no more edges in graph
 
 	if (sze == 0) {
 		mtx.lock();
@@ -26,8 +26,8 @@ std::vector<int> MVC(int id, ParGreedy &graph, std::vector<int> &Visited, int de
 	vector<int> VC2;
 	vector<int> C1 = Visited;
 	vector<int> C2 = Visited;
-	ParGreedy gLeft = graph;	/*Let gLeft be a copy of graph*/
-	ParGreedy gRight = graph;	/*Let gRight be a copy of graph*/
+	//ParGreedy gLeft = graph;	/*Let gLeft be a copy of graph*/
+	ParGreedy gRight = gLeft; // graph;	/*Let gRight be a copy of graph*/
 	bool gotIn = false;
 
 	std::future<std::vector<int>> C1_tmp;
