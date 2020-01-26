@@ -162,7 +162,7 @@ public:
 		calculerVertexMaxDegree();
 	}
 
-	int getRandonVertex() {
+	int getRandomVertex() {
 		/*Here this will explore the list of higest degree vertices and
 			it will choose any of them randomly*/
 		srand(time(NULL));	// initialize random seed:
