@@ -32,7 +32,7 @@ std::vector<int> MVC(int id, ParGreedy & gLeft, std::vector<int> &Visited, int d
 
 	std::future<std::vector<int>> C1_tmp;
 	
-	int v = gLeft.getRandonVertex();
+	int v = gLeft.getRandomVertex();
 
 	C1.push_back(v);
 	gLeft.removeVertex(v);
