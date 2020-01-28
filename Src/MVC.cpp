@@ -1,37 +1,40 @@
 #include"main.h"
 
-std::vector<int> MVC(int id, ParGreedy & gLeft, std::vector<int> &Visited, int depth) {
-	size_t sze = gLeft.getGraphSize(); //Size of adjacency list, if sze = 0; then there is no more edges in graph
+std::vector<int> MVC(int id, ParGreedy & graph, std::vector<int> &visited, int depth) {
+	size_t sze = graph.getGraphSize(); //Size of adjacency list, if sze = 0; then there is no more edges in graph
+	static int dmdm;
 
 	if (sze == 0) {
 		mtx.lock();
 		if (leaves == 0) {
-			MVCSize = Visited.size();
+			MVCSize = visited.size();
 			leaves++;
 			mtx.unlock();
-			return Visited;	/*Terminal case*/
+			return visited;	/*Terminal case*/
 		}
 		else {
-			if (Visited.size() < MVCSize)
+			if (visited.size() < MVCSize)
 			{
-				MVCSize = Visited.size();
+				MVCSize = visited.size();
 			}
 			leaves++;
 			mtx.unlock();
-			return Visited;	/*Terminal case*/
+			return visited;	/*Terminal case*/
 		}
 	}
+	//std::cout<<"Leaf # "<<leaves<<endl;
+	//std::cout<<"Size of graph is "<<sze<<" MVC size so far is "<<MVCSize<<endl;
 	//-------------
 	vector<int> VC1;
 	vector<int> VC2;
-	vector<int> C1 = Visited;
-	vector<int> C2 = Visited;
-	//ParGreedy gLeft = graph;	/*Let gLeft be a copy of graph*/
-	ParGreedy gRight = gLeft; // graph;	/*Let gRight be a copy of graph*/
+	vector<int> C1 = visited;
+	vector<int> C2 = visited;
+	ParGreedy gLeft = graph;	/*Let gLeft be a copy of graph*/
+	ParGreedy gRight = graph; // graph;	/*Let gRight be a copy of graph*/
 	bool gotIn = false;
 
 	std::future<std::vector<int>> C1_tmp;
-	
+
 	int v = gLeft.getRandomVertex();
 
 	C1.push_back(v);
@@ -53,7 +56,7 @@ std::vector<int> MVC(int id, ParGreedy & gLeft, std::vector<int> &Visited, int d
 			VC1 = MVC(0, gLeft, C1, depth++);
 		}
 	}
-	
+
 	gRight.removeNeiboursVertex(v, C2);
 
 	if (C2.size() >= MVCSize)
@@ -63,20 +66,21 @@ std::vector<int> MVC(int id, ParGreedy & gLeft, std::vector<int> &Visited, int d
 	else {
 		VC2 = MVC(0, gRight, C2, depth++);
 	}
-		
+
 
 	if (gotIn) {
 		VC1 = C1_tmp.get();
 	}
+	std::cin>>dmdm;
 	mtx.lock();
 	if (gotIn) {
 		numThreads--;
 		mtx.unlock();
 	}
-	else{ 
-		mtx.unlock(); 
+	else{
+		mtx.unlock();
 	}
-
+	printf("Size of graph is %d MVC size so far is %d \n",sze,MVCSize);
 	if (VC1.empty())	return VC2;
 	else if (VC2.empty())	return VC1;
 	else if (VC1.empty() && VC2.empty())	return {};

@@ -20,20 +20,20 @@ private:
 	int max;					//Highest degree within graph
 	vector<int> maxDegreePositionInList;	//Stores the positions of max degree vertices within the adjacency list
 	map<int, set<int>> list;	//Adjacency list
-	set<int> rows;				//Temporary variable to store 
+	set<int> rows;				//Temporary variable to store
 	map<int, int> vertexDegree;	//list of vertices with their corresponding number of edges
 public:
 	//Default constructor
 	ParGreedy()
 	{
-		NVERTICES = 0;
-		max = 0;
+		this->NVERTICES = 0;
+		this->max = 0;
 	}
 	//Parameterized constructor
 	ParGreedy(size_t n)
 	{
-		NVERTICES = n;
-		max = 0;
+		this->NVERTICES = n;
+		this->max = 0;
 	}
 
 	void addNeighbour(int val) {
@@ -46,7 +46,6 @@ public:
 	}
 
 	void removeVertex(int v) {
-		int lenghtList = list.size();
 		set<int>::iterator it = list[v].begin();
 
 		while (it != list[v].end())
@@ -126,7 +125,7 @@ public:
 	void calculerVertexMaxDegree() {
 		int tmp;
 		/*Finding vertex degrees, in order to start exploring by these ones.*/
-		for (rsize_t i = 0; i < NVERTICES; i++)
+		for (size_t i = 0; i < NVERTICES; i++)
 		{
 			tmp = list[i].size();
 			vertexDegree.insert({ i,tmp });

@@ -1,6 +1,6 @@
 #include <ctime>
-#include<iostream> 
-#include <list> 
+#include<iostream>
+#include <list>
 #include <vector>
 
 #include "ParGreedy.h"
@@ -8,21 +8,21 @@
 #include "util.h"
 
 using namespace std;
-// This struct represents a undirected graph using adjacency list 
+// This struct represents a undirected graph using adjacency list
 int maxThreads = 11;
 ctpl::thread_pool pool(maxThreads);
 long long int leaves;
-int numThreads;	
+int numThreads;
 std::mutex mtx;
 int maxDepth = 20;
 int measured_Depth = 0;
-size_t MVCSize = 80;
+size_t MVCSize = 30;
 
 int main()
 {
 	vector<int> Visited;		//vertices visited by the algorithm (Minimum vertex cover)
 	vector<int> VCMin;
-	ParGreedy Gr(80);
+	ParGreedy Gr(30);
 	Gr.readGraph("List.txt");
 
 	leaves = 0;

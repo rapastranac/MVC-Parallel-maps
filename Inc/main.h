@@ -17,7 +17,7 @@ extern ctpl::thread_pool pool;
 extern std::mutex mtx;
 extern long long int leaves;
 extern int numThreads;
-std::vector<int> MVC(int id, ParGreedy &g, std::vector<int> &Visited, int depth);
+std::vector<int> MVC(int, ParGreedy &, std::vector<int> &, int);
 
-void printResults(std::vector<int>& VCMin, double elapsed_secs);
+void printResults(std::vector<int>& , double);
 #endif
