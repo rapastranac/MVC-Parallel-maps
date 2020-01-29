@@ -9,15 +9,15 @@
 #include "ParGreedy.h"
 #include "util.h"
 
-extern int maxThreads;
-extern int maxDepth;
-extern int measured_Depth;
+extern size_t maxThreads;
+extern size_t maxDepth;
+extern size_t measured_Depth;
 extern size_t MVCSize;
 extern ctpl::thread_pool pool;
 extern std::mutex mtx;
-extern long long int leaves;
-extern int numThreads;
-std::vector<int> MVC(int, ParGreedy &, std::vector<int> &, int);
+extern size_t leaves;
+extern size_t numThreads;
+std::vector<int> MVC(int, ParGreedy&, std::vector<int>&, int);
 
-void printResults(std::vector<int>& , double);
+void printResults(std::vector<int>&, double);
 #endif

@@ -20,7 +20,7 @@ private:
 	int max;					//Highest degree within graph
 	vector<int> maxDegreePositionInList;	//Stores the positions of max degree vertices within the adjacency list
 	map<int, set<int>> list;	//Adjacency list
-	set<int> rows;				//Temporary variable to store
+	set<int> rows;				//Temporary variable to store 
 	map<int, int> vertexDegree;	//list of vertices with their corresponding number of edges
 public:
 	//Default constructor
@@ -45,23 +45,18 @@ public:
 		rows.clear();
 	}
 
-	void removeVertex(int v) {
-		set<int>::iterator it = list[v].begin();
-
-		while (it != list[v].end())
+	void storeTempFunc(std::set<int>& storeTemp)
+	{
+		for (auto i : storeTemp)
 		{
-			list[*it].erase(v);
-			if (list[*it].size() == 0) {
-				list.erase(*it);
-			}
-			vertexDegree[*it]--;
-			if (vertexDegree[*it] == 0) {
-				vertexDegree.erase(*it);
-			}
-			it++;
+			list.erase(i);
+			vertexDegree.erase(i);
 		}
-		list.erase(v);
-		vertexDegree.erase(v);
+		storeTemp.clear();
+	}
+
+	void updateVertexDegree()
+	{
 		//Recalculating the vertex with maximum number of edges
 		int tmp = 0;
 		for (auto const& i : vertexDegree)
@@ -79,47 +74,43 @@ public:
 		}
 	}
 
+	void removeVertex(int v) {
+		set<int> storeTemp;
+		set<int>::iterator it = list[v].begin();
+		/*Here we explore all the neighbours of v, and then we find 
+			vertex v inside of those neighbours in order to erase v of them*/
+		while (it != list[v].end())
+		{
+			list[*it].erase(v);
+			if (list[*it].size() == 0) {
+				//Store temporary position of vertices that ended up with no neighbours
+				storeTemp.insert(*it);
+			}
+			vertexDegree[*it]--;
+			it++;
+		}
+		
+		/*After v is been erased from its neighbours, then v is erased 
+			from graph and the VertexDegree is updated*/
+		storeTempFunc(storeTemp);
+		list.erase(v);
+		vertexDegree.erase(v);
+		updateVertexDegree();
+		
+
+	}
+
+	
 	void removeNeiboursVertex(int v, vector<int>& C2) {
-		do
-		{
-			set<int>::iterator it = list[v].begin();
-			int neighbour = *it;
-			C2.push_back(neighbour);
-			for (auto const& i : list[neighbour]) {
-				list[i].erase(neighbour);
-				if (list[i].size() == 0) {
-					list.erase(i);
-				}
-				vertexDegree[i]--;
-				if (vertexDegree[i] == 0) {
-					vertexDegree.erase(i);
-				}
-			}
+		std::set<int> neighboursOfv;
+		neighboursOfv = list[v];
 
-			list.erase(neighbour);
-			vertexDegree.erase(neighbour);
-			if (list[v].empty())
-			{
-				list.erase(v);
-				break;
-			}
-		} while (true);
-
-		//Recalculating the vertex with maximum number of edges
-		int tmp = 0;
-		for (auto const& i : vertexDegree)
+		for (auto i: neighboursOfv)
 		{
-			if (i.second > tmp) {
-				tmp = i.second;
-			}
+			C2.push_back(i);
+			removeVertex(i);
 		}
-		max = tmp;
-		maxDegreePositionInList.clear();
-		/*storing position of highest degree vertices within adjacency list*/
-		for (auto const& i : vertexDegree)
-		{
-			if (i.second == max) maxDegreePositionInList.push_back(i.first);
-		}
+		neighboursOfv.clear();
 	}
 
 	void calculerVertexMaxDegree() {
@@ -161,7 +152,7 @@ public:
 		calculerVertexMaxDegree();
 	}
 
-	int getRandomVertex() {
+	int getRandonVertex() {
 		/*Here this will explore the list of higest degree vertices and
 			it will choose any of them randomly*/
 		srand(time(NULL));	// initialize random seed:
