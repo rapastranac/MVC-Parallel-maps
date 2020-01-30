@@ -129,9 +129,10 @@ public:
 
 		for (auto i: neighboursOfv)
 		{
-			if(list.find(i)!=list.end())
+			if(list.find(i)!=list.end()){
 				C2.push_back(i);
 				removeVertex(i);
+			}
 		}
 		neighboursOfv.clear();
 		this->NVERTICES = list.size();
