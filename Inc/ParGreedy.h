@@ -22,24 +22,8 @@ private:
 	map<int, set<int>> list;	//Adjacency list
 	set<int> rows;				//Temporary variable to store 
 	map<int, int> vertexDegree;	//list of vertices with their corresponding number of edges
-public:
-	//Default constructor
-	ParGreedy()
-	{
-		this->NVERTICES = 0;
-		this->max = 0;
-	}
-	//Parameterized constructor
-	ParGreedy(size_t n)
-	{
-		this->NVERTICES = n;
-		this->max = 0;
-	}
 
-	void addNeighbour(int val) {
-		rows.insert(val);
-	}
-
+private:
 	void addRowToList(int vec0) {
 		list.insert({ vec0,rows });
 		rows.clear();
@@ -53,6 +37,26 @@ public:
 			vertexDegree.erase(i);
 		}
 		storeTemp.clear();
+	}
+
+	void calculerVertexMaxDegree() {
+		int tmp;
+		/*Finding vertex degrees, in order to start exploring by these ones.*/
+		for (size_t i = 0; i < NVERTICES; i++)
+		{
+			tmp = list[i].size();
+			this->vertexDegree.insert({ i,tmp });
+			if (tmp > max)
+			{
+				this->max = tmp;
+			}
+		}
+		for (size_t i = 0; i < NVERTICES; i++)
+		{
+			if (vertexDegree[i] == max) {
+				this->maxDegreePositionInList.push_back(i);
+			}
+		}
 	}
 
 	void updateVertexDegree()
@@ -73,6 +77,24 @@ public:
 			if (i.second == max) maxDegreePositionInList.push_back(i.first);
 		}
 	}
+public:
+	//Default constructor
+	ParGreedy()
+	{
+		this->NVERTICES = 0;
+		this->max = 0;
+	}
+	//Parameterized constructor
+	ParGreedy(size_t n)
+	{
+		this->NVERTICES = n;
+		this->max = 0;
+	}
+
+	void addNeighbour(int val) {
+		this->rows.insert(val);
+	}
+
 
 	void removeVertex(int v) {
 		set<int> storeTemp;
@@ -81,23 +103,23 @@ public:
 			vertex v inside of those neighbours in order to erase v of them*/
 		while (it != list[v].end())
 		{
-			list[*it].erase(v);
+			this->list[*it].erase(v);
 			if (list[*it].size() == 0) {
 				//Store temporary position of vertices that ended up with no neighbours
 				storeTemp.insert(*it);
 			}
-			vertexDegree[*it]--;
+			this->vertexDegree[*it]--;
 			it++;
 		}
 		
 		/*After v is been erased from its neighbours, then v is erased 
 			from graph and the VertexDegree is updated*/
 		storeTempFunc(storeTemp);
-		list.erase(v);
-		vertexDegree.erase(v);
+		this->list.erase(v);
+		this->vertexDegree.erase(v);
 		updateVertexDegree();
-		
 
+		this->NVERTICES = list.size();
 	}
 
 	
@@ -111,33 +133,18 @@ public:
 			removeVertex(i);
 		}
 		neighboursOfv.clear();
+		this->NVERTICES = list.size();
 	}
 
-	void calculerVertexMaxDegree() {
-		int tmp;
-		/*Finding vertex degrees, in order to start exploring by these ones.*/
-		for (size_t i = 0; i < NVERTICES; i++)
-		{
-			tmp = list[i].size();
-			vertexDegree.insert({ i,tmp });
-			if (tmp > max) max = tmp;
-		}
-		for (size_t i = 0; i < NVERTICES; i++)
-		{
-			if (vertexDegree[i] == max) {
-				maxDegreePositionInList.push_back(i);
-			}
-		}
-	}
 
-	void readGraph(string NameOfFile) {
+	void readGraph(string NameOfFile, string directory) {
 		using namespace std;
 		string line;
 		vector<string> split;
 		int i = 0;
 		while (1)
 		{
-			line = Util::GetFileLine(NameOfFile, i);
+			line = Util::GetFileLine(directory + NameOfFile, i);
 			if (line == "") break;
 			split = Util::Split(line, "\t");
 
@@ -162,7 +169,7 @@ public:
 	}
 
 	int getGraphSize() {
-		return list.size();
+		return NVERTICES;
 	}
 
 	//Copy constructor
@@ -179,7 +186,6 @@ public:
 	}
 
 };
-
 
 
 #endif
