@@ -16,13 +16,13 @@ size_t numThreads;
 std::mutex mtx;
 size_t maxDepth = 20;
 size_t measured_Depth = 0;
-size_t MVCSize = 80;
+size_t MVCSize = 100;
 
 int main()
 {
 	vector<int> Visited;		//vertices visited by the algorithm (Minimum vertex cover)
 	vector<int> VCMin;
-	ParGreedy Gr(80);
+	ParGreedy Gr(100);
 	Gr.readGraph("List.txt","Input/"); //it depends where the Makefile is located
 
 	leaves = 0;

@@ -20,7 +20,7 @@ private:
 	int max;					//Highest degree within graph
 	vector<int> maxDegreePositionInList;	//Stores the positions of max degree vertices within the adjacency list
 	map<int, set<int>> list;	//Adjacency list
-	set<int> rows;				//Temporary variable to store 
+	set<int> rows;				//Temporary variable to store
 	map<int, int> vertexDegree;	//list of vertices with their corresponding number of edges
 
 private:
@@ -99,7 +99,7 @@ public:
 	void removeVertex(int v) {
 		set<int> storeTemp;
 		set<int>::iterator it = list[v].begin();
-		/*Here we explore all the neighbours of v, and then we find 
+		/*Here we explore all the neighbours of v, and then we find
 			vertex v inside of those neighbours in order to erase v of them*/
 		while (it != list[v].end())
 		{
@@ -111,8 +111,8 @@ public:
 			this->vertexDegree[*it]--;
 			it++;
 		}
-		
-		/*After v is been erased from its neighbours, then v is erased 
+
+		/*After v is been erased from its neighbours, then v is erased
 			from graph and the VertexDegree is updated*/
 		storeTempFunc(storeTemp);
 		this->list.erase(v);
@@ -122,15 +122,16 @@ public:
 		this->NVERTICES = list.size();
 	}
 
-	
+
 	void removeNeiboursVertex(int v, vector<int>& C2) {
 		std::set<int> neighboursOfv;
 		neighboursOfv = list[v];
 
 		for (auto i: neighboursOfv)
 		{
-			C2.push_back(i);
-			removeVertex(i);
+			if(list.find(i)!=list.end())
+				C2.push_back(i);
+				removeVertex(i);
 		}
 		neighboursOfv.clear();
 		this->NVERTICES = list.size();
