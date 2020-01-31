@@ -22,21 +22,12 @@ private:
 	map<int, set<int>> list;	//Adjacency list
 	set<int> rows;				//Temporary variable to store
 	map<int, int> vertexDegree;	//list of vertices with their corresponding number of edges
+	set<int> zeroVertexDegree;	//List of vertices with zero degree
 
 private:
 	void addRowToList(int vec0) {
 		list.insert({ vec0,rows });
 		rows.clear();
-	}
-
-	void storeTempFunc(std::set<int>& storeTemp)
-	{
-		for (auto i : storeTemp)
-		{
-			list.erase(i);
-			vertexDegree.erase(i);
-		}
-		storeTemp.clear();
 	}
 
 	void calculerVertexMaxDegree() {
@@ -95,9 +86,20 @@ public:
 		this->rows.insert(val);
 	}
 
+	void removeZeroVertexDegree()
+	{
+		/*After erasing vertices, some of them might end up with zero degree,
+			this function is in charge of erasing those vertices*/
+		for (auto i : zeroVertexDegree)
+		{
+			list.erase(i);
+			vertexDegree.erase(i);
+		}
+		this->zeroVertexDegree.clear();
+		this->NVERTICES = list.size();
+	}
 
 	void removeVertex(int v) {
-		set<int> storeTemp;
 		set<int>::iterator it = list[v].begin();
 		/*Here we explore all the neighbours of v, and then we find
 			vertex v inside of those neighbours in order to erase v of them*/
@@ -106,7 +108,7 @@ public:
 			this->list[*it].erase(v);
 			if (list[*it].size() == 0) {
 				//Store temporary position of vertices that ended up with no neighbours
-				storeTemp.insert(*it);
+				this->zeroVertexDegree.insert(*it);
 			}
 			this->vertexDegree[*it]--;
 			it++;
@@ -114,14 +116,11 @@ public:
 
 		/*After v is been erased from its neighbours, then v is erased
 			from graph and the VertexDegree is updated*/
-		storeTempFunc(storeTemp);
 		this->list.erase(v);
 		this->vertexDegree.erase(v);
 		updateVertexDegree();
-
 		this->NVERTICES = list.size();
 	}
-
 
 	void removeNeiboursVertex(int v, vector<int>& C2) {
 		std::set<int> neighboursOfv;
@@ -129,7 +128,8 @@ public:
 
 		for (auto i: neighboursOfv)
 		{
-			if(list.find(i)!=list.end()){
+			if (list.find(i) != list.end())
+			{
 				C2.push_back(i);
 				removeVertex(i);
 			}
@@ -137,7 +137,6 @@ public:
 		neighboursOfv.clear();
 		this->NVERTICES = list.size();
 	}
-
 
 	void readGraph(string NameOfFile, string directory) {
 		using namespace std;
@@ -161,7 +160,7 @@ public:
 		calculerVertexMaxDegree();
 	}
 
-	int getRandonVertex() {
+	int getRandomVertex() {
 		/*Here this will explore the list of higest degree vertices and
 			it will choose any of them randomly*/
 		srand(time(NULL));	// initialize random seed:
@@ -188,6 +187,7 @@ public:
 	}
 
 };
+
 
 
 #endif

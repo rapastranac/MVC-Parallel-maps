@@ -9,7 +9,6 @@ std::vector<int> MVC(int id, ParGreedy & graph, std::vector<int> &Visited, int d
 			MVCSize = Visited.size();
 			leaves++;
 			mtx.unlock();
-
 			return Visited;	/*Terminal case*/
 		}
 		else {
@@ -29,12 +28,12 @@ std::vector<int> MVC(int id, ParGreedy & graph, std::vector<int> &Visited, int d
 	vector<int> C1 = Visited;
 	vector<int> C2 = Visited;
 	ParGreedy gLeft = graph;	/*Let gLeft be a copy of graph*/
-	ParGreedy gRight = graph; /*Let gRight be a copy of graph*/
+	ParGreedy gRight = graph; // graph;	/*Let gRight be a copy of graph*/
 	bool gotIn = false;
 
 	std::future<std::vector<int>> C1_tmp;
 
-	size_t v = gLeft.getRandonVertex();
+	size_t v = gLeft.getRandomVertex();
 
 	if (C1.size() >= MVCSize) {
 		VC1 = {};
@@ -42,6 +41,7 @@ std::vector<int> MVC(int id, ParGreedy & graph, std::vector<int> &Visited, int d
 	else {
 		C1.push_back(v);
 		gLeft.removeVertex(v);
+		gLeft.removeZeroVertexDegree();
 		mtx.lock();
 		if (numThreads < maxThreads) {
 			numThreads++;
@@ -56,6 +56,7 @@ std::vector<int> MVC(int id, ParGreedy & graph, std::vector<int> &Visited, int d
 	}
 
 	gRight.removeNeiboursVertex(v, C2);
+	gRight.removeZeroVertexDegree();
 
 	if (C2.size() >= MVCSize)
 	{
