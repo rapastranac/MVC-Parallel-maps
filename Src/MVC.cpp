@@ -4,14 +4,12 @@ std::vector<int> MVC(int id, ParGreedy & graph, std::vector<int> &Visited, int d
 	size_t sze = graph.getGraphSize(); //Size of adjacency list, if sze = 0; then there is no more edges in graph
 
 	if (sze == 0) {
-		
-	
 		mtx.lock();
 		if (leaves == 0) {
 			MVCSize = Visited.size();
 			leaves++;
 			mtx.unlock();
-			
+
 			return Visited;	/*Terminal case*/
 		}
 		else {
@@ -31,13 +29,13 @@ std::vector<int> MVC(int id, ParGreedy & graph, std::vector<int> &Visited, int d
 	vector<int> C1 = Visited;
 	vector<int> C2 = Visited;
 	ParGreedy gLeft = graph;	/*Let gLeft be a copy of graph*/
-	ParGreedy gRight = graph; // graph;	/*Let gRight be a copy of graph*/
+	ParGreedy gRight = graph; /*Let gRight be a copy of graph*/
 	bool gotIn = false;
 
 	std::future<std::vector<int>> C1_tmp;
-	
+
 	size_t v = gLeft.getRandonVertex();
-	
+
 	if (C1.size() >= MVCSize) {
 		VC1 = {};
 	}
@@ -56,7 +54,7 @@ std::vector<int> MVC(int id, ParGreedy & graph, std::vector<int> &Visited, int d
 			VC1 = MVC(0, gLeft, C1, ++depth);
 		}
 	}
-		
+
 	gRight.removeNeiboursVertex(v, C2);
 
 	if (C2.size() >= MVCSize)
@@ -66,7 +64,7 @@ std::vector<int> MVC(int id, ParGreedy & graph, std::vector<int> &Visited, int d
 	else {
 		VC2 = MVC(0, gRight, C2, ++depth);
 	}
-		
+
 
 	if (gotIn) {
 		VC1 = C1_tmp.get();
@@ -76,8 +74,8 @@ std::vector<int> MVC(int id, ParGreedy & graph, std::vector<int> &Visited, int d
 		numThreads--;
 		mtx.unlock();
 	}
-	else{ 
-		mtx.unlock(); 
+	else{
+		mtx.unlock();
 	}
 
 	if (VC1.empty())	return VC2;

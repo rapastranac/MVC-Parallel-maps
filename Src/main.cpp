@@ -1,6 +1,6 @@
 #include <ctime>
-#include<iostream> 
-#include <list> 
+#include<iostream>
+#include <list>
 #include <vector>
 
 #include "ParGreedy.h"
@@ -8,11 +8,11 @@
 #include "util.h"
 
 using namespace std;
-// This struct represents a undirected graph using adjacency list 
+// This struct represents a undirected graph using adjacency list
 size_t maxThreads = 11;
 ctpl::thread_pool pool(maxThreads);
 size_t leaves;
-size_t numThreads;	
+size_t numThreads;
 std::mutex mtx;
 size_t maxDepth = 20;
 size_t measured_Depth = 0;
