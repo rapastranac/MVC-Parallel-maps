@@ -16,7 +16,6 @@ using namespace std;
 class ParGreedy
 {
 private:
-	size_t NVERTICES;			//number of vertices
 	int max;					//Highest degree within graph
 	vector<int> maxDegreePositionInList;	//Stores the positions of max degree vertices within the adjacency list
 	map<int, set<int>> list;	//Adjacency list
@@ -33,7 +32,7 @@ private:
 	void calculerVertexMaxDegree() {
 		int tmp;
 		/*Finding vertex degrees, in order to start exploring by these ones.*/
-		for (size_t i = 0; i < NVERTICES; i++)
+		for (size_t i = 0; i < list.size(); i++)
 		{
 			tmp = list[i].size();
 			this->vertexDegree.insert({ i,tmp });
@@ -42,7 +41,7 @@ private:
 				this->max = tmp;
 			}
 		}
-		for (size_t i = 0; i < NVERTICES; i++)
+		for (size_t i = 0; i < list.size(); i++)
 		{
 			if (vertexDegree[i] == max) {
 				this->maxDegreePositionInList.push_back(i);
@@ -72,13 +71,11 @@ public:
 	//Default constructor
 	ParGreedy()
 	{
-		this->NVERTICES = 0;
 		this->max = 0;
 	}
 	//Parameterized constructor
 	ParGreedy(size_t n)
 	{
-		this->NVERTICES = n;
 		this->max = 0;
 	}
 
@@ -96,7 +93,6 @@ public:
 			vertexDegree.erase(i);
 		}
 		this->zeroVertexDegree.clear();
-		this->NVERTICES = list.size();
 	}
 
 	void removeVertex(int v) {
@@ -119,7 +115,6 @@ public:
 		this->list.erase(v);
 		this->vertexDegree.erase(v);
 		updateVertexDegree();
-		this->NVERTICES = list.size();
 	}
 
 	void removeNeiboursVertex(int v, vector<int>& C2) {
@@ -135,7 +130,6 @@ public:
 			}
 		}
 		neighboursOfv.clear();
-		this->NVERTICES = list.size();
 	}
 
 	void readGraph(string NameOfFile, string directory) {
@@ -170,12 +164,11 @@ public:
 	}
 
 	int getGraphSize() {
-		return NVERTICES;
+		return list.size();
 	}
 
 	//Copy constructor
 	ParGreedy(const ParGreedy& src) {
-		this ->NVERTICES = src.NVERTICES;
 		this ->max = src.max;
 		this->maxDegreePositionInList = src.maxDegreePositionInList;
 		this->list = src.list;
