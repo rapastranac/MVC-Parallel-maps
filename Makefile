@@ -15,7 +15,7 @@ SRCS = $(patsubst %,$(SRC_DIR)/%,$(_SRCS))
 _OBJS = main.o MVC.o
 OBJS = $(patsubst %,$(OBJ_DIR)/%,$(_OBJS))
 
-_DEPS = main.h ParGreedy.h util.h ctpl_stl.h
+_DEPS = main.h GraphHandler.h util.h ctpl_stl.h ParBranchHandler.h
 DEPS = $(patsubst %,$(INC_DIR)/%,$(_DEPS))
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp $(DEPS)
