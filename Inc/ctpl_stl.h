@@ -41,16 +41,16 @@
 namespace ctpl {
 
 	namespace detail {
-		template <typename T>
+		template <typename size_t>
 		class Queue {
 		public:
-			bool push(T const& value) {
+			bool push(size_t const& value) {
 				std::unique_lock<std::mutex> lock(this->mutex);
 				this->q.push(value);
 				return true;
 			}
 			// deletes the retrieved element, do not use for non integral types
-			bool pop(T& v) {
+			bool pop(size_t& v) {
 				std::unique_lock<std::mutex> lock(this->mutex);
 				if (this->q.empty())
 					return false;
@@ -63,7 +63,7 @@ namespace ctpl {
 				return this->q.empty();
 			}
 		private:
-			std::queue<T> q;
+			std::queue<size_t> q;
 			std::mutex mutex;
 		};
 	}

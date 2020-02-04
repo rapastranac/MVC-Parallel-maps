@@ -1,44 +1,57 @@
 #include <ctime>
 #include<iostream>
 #include <list>
+#include <mutex>
 #include <vector>
 
-#include "ParGreedy.h"
+#include "ParBranchHandler.h"
+#include "GraphHandler.h"
 #include "main.h"
 #include "util.h"
 
 using namespace std;
-// This struct represents a undirected graph using adjacency list
-size_t maxThreads = 11;
-ctpl::thread_pool pool(maxThreads);
+
+//Declaring static class member
+size_t ParBranchHandler::maxThreads = 11;
+size_t ParBranchHandler::numThreads = 0;
+std::mutex ParBranchHandler::mtx;
+ctpl::thread_pool ParBranchHandler::pool(11);
+
+//Creates here a global object Par Branch Handler type
+
+
+//ctpl::thread_pool pool(5);
 size_t leaves;
-size_t numThreads;
-std::mutex mtx;
+
 size_t maxDepth = 20;
 size_t measured_Depth = 0;
-size_t MVCSize = 100;
+size_t MVCSize = 80;
+
 
 int main()
 {
-	vector<int> Visited;		//vertices visited by the algorithm (Minimum vertex cover)
-	vector<int> VCMin;
-	ParGreedy Gr(100);
-	Gr.readGraph("List.txt","Input/"); //it depends where the Makefile is located
+	vector<size_t> Visited;		//vertices visited by the algorithm (Minimum vertex cover)
+	vector<size_t> VCMin;
+	GraphHandler Gr;
+	//size_t GraphHandler::leaves
+	Gr.readGraph("List - 80.txt","Input/"); //it depends where the Makefile is located
+
 
 	leaves = 0;
-	numThreads = 0;
-
+	
+	
 	clock_t begin = clock();
+	//VCMin = Gr.makeBranchingCall(MVC, 0, Gr, Visited, 0);
 	VCMin = MVC(0, Gr, Visited, 0);	/*minimum vertex cover*/
 	clock_t end = clock();
-	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	double elapsed_secs = ((double)end - (double)begin) / CLOCKS_PER_SEC;
 
 	printResults(VCMin, elapsed_secs);	//Printing the minimum vertex cover
 
 	return 0;
 }
 
-void printResults(std::vector<int>& VCMin, double elapsed_secs)
+void printResults(std::vector<size_t>& VCMin, double elapsed_secs)
 {
 	int sizemvc = VCMin.size();
 	printf("---------------------------------------------------------- \n");

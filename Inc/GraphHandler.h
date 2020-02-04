@@ -1,5 +1,5 @@
-#ifndef PARGREEDY_H
-#define PARGREEDY_H
+#ifndef GRAPHHANDLER_H
+#define GRAPHHANDLER_H
 
 using namespace std;
 
@@ -11,26 +11,28 @@ using namespace std;
 #include <unordered_map>
 #include <unordered_set>
 
+#include "ParBranchHandler.h"
 #include "util.h"
 
-class ParGreedy
+class GraphHandler :public ParBranchHandler
 {
 private:
-	int max;					//Highest degree within graph
-	vector<int> maxDegreePositionInList;	//Stores the positions of max degree vertices within the adjacency list
-	map<int, set<int>> list;	//Adjacency list
-	set<int> rows;				//Temporary variable to store
-	map<int, int> vertexDegree;	//list of vertices with their corresponding number of edges
-	set<int> zeroVertexDegree;	//List of vertices with zero degree
+	static size_t leaves;
+	size_t max;					//Highest degree within graph
+	vector<size_t> maxDegreePositionInList;	//Stores the positions of max degree vertices within the adjacency list
+	map<size_t, set<size_t>> list;	//Adjacency list
+	set<size_t> rows;				//Temporary variable to store
+	map<size_t, size_t> vertexDegree;	//list of vertices with their corresponding number of edges
+	set<size_t> zeroVertexDegree;	//List of vertices with zero degree
 
 private:
-	void addRowToList(int vec0) {
+	void addRowToList(size_t vec0) {
 		list.insert({ vec0,rows });
 		rows.clear();
 	}
 
 	void calculerVertexMaxDegree() {
-		int tmp;
+		size_t tmp;
 		/*Finding vertex degrees, in order to start exploring by these ones.*/
 		for (size_t i = 0; i < list.size(); i++)
 		{
@@ -52,7 +54,7 @@ private:
 	void updateVertexDegree()
 	{
 		//Recalculating the vertex with maximum number of edges
-		int tmp = 0;
+		size_t tmp = 0;
 		for (auto const& i : vertexDegree)
 		{
 			if (i.second > tmp) {
@@ -69,17 +71,18 @@ private:
 	}
 public:
 	//Default constructor
-	ParGreedy()
+	/*GraphHandler()
 	{
+		this->NVERTICES = 0;
 		this->max = 0;
-	}
+	}*/
 	//Parameterized constructor
-	ParGreedy(size_t n)
+	GraphHandler()
 	{
 		this->max = 0;
 	}
 
-	void addNeighbour(int val) {
+	void addNeighbour(size_t val) {
 		this->rows.insert(val);
 	}
 
@@ -95,8 +98,8 @@ public:
 		this->zeroVertexDegree.clear();
 	}
 
-	void removeVertex(int v) {
-		set<int>::iterator it = list[v].begin();
+	void removeVertex(size_t v) {
+		typename set<size_t>::iterator it = list[v].begin();
 		/*Here we explore all the neighbours of v, and then we find
 			vertex v inside of those neighbours in order to erase v of them*/
 		while (it != list[v].end())
@@ -117,8 +120,8 @@ public:
 		updateVertexDegree();
 	}
 
-	void removeNeiboursVertex(int v, vector<int>& C2) {
-		std::set<int> neighboursOfv;
+	void removeNeiboursVertex(size_t v, vector<size_t>& C2) {
+		std::set<size_t> neighboursOfv;
 		neighboursOfv = list[v];
 
 		for (auto i: neighboursOfv)
@@ -136,7 +139,7 @@ public:
 		using namespace std;
 		string line;
 		vector<string> split;
-		int i = 0;
+		size_t i = 0;
 		while (1)
 		{
 			line = Util::GetFileLine(directory + NameOfFile, i);
@@ -154,30 +157,30 @@ public:
 		calculerVertexMaxDegree();
 	}
 
-	int getRandomVertex() {
+	size_t getRandomVertex() {
 		/*Here this will explore the list of higest degree vertices and
 			it will choose any of them randomly*/
 		srand(time(NULL));	// initialize random seed:
-		int random = rand() % maxDegreePositionInList.size();
+		size_t random = rand() % maxDegreePositionInList.size();
 		random = 0;			//Remporary to choose only the first of the list
 		return maxDegreePositionInList[random];
 	}
 
-	int getGraphSize() {
+	size_t getGraphSize() {
 		return list.size();
 	}
 
 	//Copy constructor
-	ParGreedy(const ParGreedy& src) {
+	GraphHandler(const GraphHandler& src) {
 		this ->max = src.max;
 		this->maxDegreePositionInList = src.maxDegreePositionInList;
 		this->list = src.list;
 		this ->vertexDegree = src.vertexDegree;
 	}
 
-	~ParGreedy()
+	/*~GraphHandler()
 	{
-	}
+	}*/
 
 };
 

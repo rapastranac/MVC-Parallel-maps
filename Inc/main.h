@@ -6,18 +6,16 @@
 #include <thread>
 
 #include "ctpl_stl.h"
-#include "ParGreedy.h"
+#include "GraphHandler.h"
+#include "ParBranchHandler.h"
 #include "util.h"
 
-extern size_t maxThreads;
 extern size_t maxDepth;
 extern size_t measured_Depth;
 extern size_t MVCSize;
-extern ctpl::thread_pool pool;
-extern std::mutex mtx;
 extern size_t leaves;
-extern size_t numThreads;
-std::vector<int> MVC(int, ParGreedy&, std::vector<int>&, int);
 
-void printResults(std::vector<int>&, double);
+std::vector<size_t> MVC(size_t, GraphHandler&, std::vector<size_t>&, size_t);
+
+void printResults(std::vector<size_t>&, double);
 #endif
