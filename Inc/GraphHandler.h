@@ -14,10 +14,9 @@ using namespace std;
 #include "ParBranchHandler.h"
 #include "util.h"
 
-class GraphHandler :public ParBranchHandler
+class GraphHandler
 {
 private:
-	static size_t leaves;
 	size_t max;					//Highest degree within graph
 	vector<size_t> maxDegreePositionInList;	//Stores the positions of max degree vertices within the adjacency list
 	map<size_t, set<size_t>> list;	//Adjacency list
@@ -70,6 +69,11 @@ private:
 		}
 	}
 public:
+
+	static size_t currentMVCSize;
+	static size_t leaves;
+	static size_t maxDepth;
+	static size_t measured_Depth;
 	//Default constructor
 	/*GraphHandler()
 	{
@@ -124,7 +128,7 @@ public:
 		std::set<size_t> neighboursOfv;
 		neighboursOfv = list[v];
 
-		for (auto i: neighboursOfv)
+		for (auto i : neighboursOfv)
 		{
 			if (list.find(i) != list.end())
 			{
@@ -155,6 +159,7 @@ public:
 			i++;
 		}
 		calculerVertexMaxDegree();
+		this->currentMVCSize = list.size();
 	}
 
 	size_t getRandomVertex() {
@@ -172,10 +177,10 @@ public:
 
 	//Copy constructor
 	GraphHandler(const GraphHandler& src) {
-		this ->max = src.max;
+		this->max = src.max;
 		this->maxDegreePositionInList = src.maxDegreePositionInList;
 		this->list = src.list;
-		this ->vertexDegree = src.vertexDegree;
+		this->vertexDegree = src.vertexDegree;
 	}
 
 	/*~GraphHandler()

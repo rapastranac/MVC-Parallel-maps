@@ -10,12 +10,9 @@
 #include "ParBranchHandler.h"
 #include "util.h"
 
-extern size_t maxDepth;
-extern size_t measured_Depth;
-extern size_t MVCSize;
-extern size_t leaves;
-
 std::vector<size_t> MVC(size_t, GraphHandler&, std::vector<size_t>&, size_t);
 
-void printResults(std::vector<size_t>&, double);
+const std::vector<size_t>& returnFunction(std::vector<size_t>& VC1, std::vector<size_t>& VC2);
+
+void printResults(std::vector<size_t>&, double, GraphHandler&);
 #endif

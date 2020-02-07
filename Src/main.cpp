@@ -11,57 +11,47 @@
 
 using namespace std;
 
-//Declaring static class member
-size_t ParBranchHandler::maxThreads = 11;
-size_t ParBranchHandler::numThreads = 0;
-std::mutex ParBranchHandler::mtx;
-ctpl::thread_pool ParBranchHandler::pool(11);
+ParBranchHandler* ParBranchHandler::instance = nullptr;
 
-//Creates here a global object Par Branch Handler type
+size_t GraphHandler::currentMVCSize = 0;
 
-
-//ctpl::thread_pool pool(5);
-size_t leaves;
-
-size_t maxDepth = 20;
-size_t measured_Depth = 0;
-size_t MVCSize = 80;
+size_t GraphHandler::leaves=0;
+size_t GraphHandler::maxDepth = 20;
+size_t GraphHandler::measured_Depth = 0;
 
 
 int main()
 {
+	ParBranchHandler::Instance()->SetMaxThreads(30);
+
 	vector<size_t> Visited;		//vertices visited by the algorithm (Minimum vertex cover)
 	vector<size_t> VCMin;
 	GraphHandler Gr;
-	//size_t GraphHandler::leaves
-	Gr.readGraph("List - 80.txt","Input/"); //it depends where the Makefile is located
 
+	Gr.readGraph("List - 30.txt", "Input/"); //it depends where the Makefile is located
 
-	leaves = 0;
-	
-	
 	clock_t begin = clock();
 	//VCMin = Gr.makeBranchingCall(MVC, 0, Gr, Visited, 0);
 	VCMin = MVC(0, Gr, Visited, 0);	/*minimum vertex cover*/
 	clock_t end = clock();
 	double elapsed_secs = ((double)end - (double)begin) / CLOCKS_PER_SEC;
 
-	printResults(VCMin, elapsed_secs);	//Printing the minimum vertex cover
+	printResults(VCMin, elapsed_secs, Gr);	//Printing the minimum vertex cover
 
 	return 0;
 }
 
-void printResults(std::vector<size_t>& VCMin, double elapsed_secs)
+void printResults(std::vector<size_t>& VCMin, double elapsed_secs, GraphHandler& Gr)
 {
-	int sizemvc = VCMin.size();
+	size_t sizemvc = VCMin.size();
 	printf("---------------------------------------------------------- \n");
 	printf("Minimum vertex cover is: ");
 	for (int i = 0; i < VCMin.size(); i++) cout << VCMin[i] << "\t";
 	printf("\n");
-	printf("Size: %i \n", sizemvc);
+	printf("Size: %u \n", sizemvc);
 	printf("Elapsed time : %f \n", elapsed_secs);
-	printf("Number of leaves : %i \n", leaves);
-	printf("Maximum depth reached : %i \n", measured_Depth);
+	printf("Number of leaves : %u \n", Gr.leaves);
+	printf("Maximum depth reached : %u \n", Gr.measured_Depth);
 	printf("---------------------------------------------------------- \n");
 	system("pause");
 }
