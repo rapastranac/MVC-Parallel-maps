@@ -1,28 +1,28 @@
-#include"main.h"
+#include "main.h"
 
-std::vector<size_t> MVC(size_t id, GraphHandler& graph, std::vector<size_t>& Visited, size_t depth) {
+std::vector<size_t> MVC(int id, GraphHandler& graph, std::vector<size_t>& Visited, size_t depth) {
 	size_t sze = graph.getGraphSize(); //Size of adjacency list, if sze = 0; then there is no more edges in graph
-
 	if (sze == 0) {
-		ParBranchHandler::Instance()->Lock();
-		if (graph.leaves == 0) {
-			graph.currentMVCSize = Visited.size();
-			graph.leaves++;
-			ParBranchHandler::Instance()->Unlock();
+
+		ParBranchHandler::Instance().Lock();
+		if (GraphHandler::leaves == 0) {
+			GraphHandler::currentMVCSize = Visited.size();
+			GraphHandler::leaves++;
+			ParBranchHandler::Instance().Unlock();
 			return Visited;	//Terminal case
 		}
 		else {
-			if (Visited.size() < graph.currentMVCSize)
+			if (Visited.size() < GraphHandler::currentMVCSize)
 			{
-				printf("MVC found so far has %u elements\n", graph.currentMVCSize);
-				graph.currentMVCSize = Visited.size();
+				printf("MVC found so far has %u elements\n", (int)GraphHandler::currentMVCSize);
+				GraphHandler::currentMVCSize = Visited.size();
 			}
-			graph.leaves++;
-			if (depth > graph.measured_Depth)
+			GraphHandler::leaves++;
+			if (depth > GraphHandler::measured_Depth)
 			{
-				graph.measured_Depth = depth;
+				GraphHandler::measured_Depth = depth;
 			}
-			ParBranchHandler::Instance()->Unlock();
+			ParBranchHandler::Instance().Unlock();
 			return Visited;	//Terminal case
 		}
 	}
@@ -33,41 +33,58 @@ std::vector<size_t> MVC(size_t id, GraphHandler& graph, std::vector<size_t>& Vis
 	vector<size_t> C2 = Visited;
 	GraphHandler gLeft = graph;	/*Let gLeft be a copy of graph*/
 	GraphHandler gRight = graph; // graph;	/*Let gRight be a copy of graph*/
+	size_t newDepth = depth + 1;
+
 
 	size_t v = gLeft.getRandomVertex();
 
-	int branchingCallId = -1;
-	if (C1.size() >= graph.currentMVCSize) {
-		VC1 = {};
-	}
-	else {
+	ParBranchHandler::FutureHolder resultHolder;
+
+	if (C1.size() < GraphHandler::currentMVCSize)
+	{
 		C1.push_back(v);
 		gLeft.removeVertex(v);
 		gLeft.removeZeroVertexDegree();
-		branchingCallId = ParBranchHandler::Instance()->makeBranchingCall(MVC, 0, ref(gLeft), ref(C1), ref(++depth));
+		ParBranchHandler::Instance().makeBranchingCall(resultHolder, MVC, id, ref(gLeft), ref(C1), ref(newDepth));
 	}
 
 	gRight.removeNeiboursVertex(v, C2);
 	gRight.removeZeroVertexDegree();
 
-	if (C2.size() >= graph.currentMVCSize)
+	if (C2.size() < GraphHandler::currentMVCSize)
 	{
-		VC2 = {};
-	}
-	else {
-		VC2 = MVC(0, gRight, C2, ++depth);
+		VC2 = MVC(id, gRight, C2, newDepth);
 	}
 
-	ParBranchHandler::Instance()->getBranchingResult(branchingCallId, VC1);
+	VC1 = resultHolder.getResult();
 
-	return returnFunction(VC1, VC2);
+	vector<size_t> returnVal = returnFunction(VC1, VC2);
+	// printf("vx %d vc1 %d vc2 %d\n", vx.size(), VC1.size(), VC2.size());
+	return returnVal;
 }
 
 const std::vector<size_t>& returnFunction(std::vector<size_t>& VC1, std::vector<size_t>& VC2)
 {
-	if (VC1.empty())	return VC2;
-	else if (VC2.empty())	return VC1;
-	else if (VC1.empty() && VC2.empty())	return {};
-	else if (VC1.size() >= VC2.size())	return VC2;
-	else return VC1;
+	if (!VC1.empty() && !VC2.empty())
+	{
+		if (VC1.size() >= VC2.size())
+		{
+			return VC2;
+		}
+		else
+		{
+			return VC1;
+		}
+	}
+	else if (!VC1.empty() && VC2.empty())
+	{
+		return VC1;
+	}
+	else if (VC1.empty() && !VC2.empty())
+	{
+		return VC2;
+	}
+	else {
+		return VC1; //At this point VC1 or VC2 are empty, here empty vector is returned
+	}
 }

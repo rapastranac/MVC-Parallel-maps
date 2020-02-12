@@ -10,7 +10,7 @@
 #include "ParBranchHandler.h"
 #include "util.h"
 
-std::vector<size_t> MVC(size_t, GraphHandler&, std::vector<size_t>&, size_t);
+std::vector<size_t> MVC(int, GraphHandler&, std::vector<size_t>&, size_t);
 
 const std::vector<size_t>& returnFunction(std::vector<size_t>& VC1, std::vector<size_t>& VC2);
 

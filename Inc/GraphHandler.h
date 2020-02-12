@@ -26,7 +26,8 @@ private:
 
 private:
 	void addRowToList(size_t vec0) {
-		list.insert({ vec0,rows });
+		//list[vec0] = rows;
+		list.insert(pair<size_t, set<size_t>>(vec0,rows));
 		rows.clear();
 	}
 
@@ -36,7 +37,7 @@ private:
 		for (size_t i = 0; i < list.size(); i++)
 		{
 			tmp = list[i].size();
-			this->vertexDegree.insert({ i,tmp });
+			this->vertexDegree[i] = tmp;
 			if (tmp > max)
 			{
 				this->max = tmp;
@@ -74,12 +75,7 @@ public:
 	static size_t leaves;
 	static size_t maxDepth;
 	static size_t measured_Depth;
-	//Default constructor
-	/*GraphHandler()
-	{
-		this->NVERTICES = 0;
-		this->max = 0;
-	}*/
+
 	//Parameterized constructor
 	GraphHandler()
 	{
@@ -103,12 +99,13 @@ public:
 	}
 
 	void removeVertex(size_t v) {
-		typename set<size_t>::iterator it = list[v].begin();
+
+		auto it = list[v].begin();
 		/*Here we explore all the neighbours of v, and then we find
 			vertex v inside of those neighbours in order to erase v of them*/
 		while (it != list[v].end())
 		{
-			this->list[*it].erase(v);
+			list[*it].erase(v);
 			if (list[*it].size() == 0) {
 				//Store temporary position of vertices that ended up with no neighbours
 				this->zeroVertexDegree.insert(*it);
@@ -122,6 +119,7 @@ public:
 		this->list.erase(v);
 		this->vertexDegree.erase(v);
 		updateVertexDegree();
+
 	}
 
 	void removeNeiboursVertex(size_t v, vector<size_t>& C2) {
@@ -136,7 +134,7 @@ public:
 				removeVertex(i);
 			}
 		}
-		neighboursOfv.clear();
+		//neighboursOfv.clear();
 	}
 
 	void readGraph(string NameOfFile, string directory) {
@@ -159,7 +157,7 @@ public:
 			i++;
 		}
 		calculerVertexMaxDegree();
-		this->currentMVCSize = list.size();
+		GraphHandler::currentMVCSize = list.size();
 	}
 
 	size_t getRandomVertex() {
@@ -167,7 +165,7 @@ public:
 			it will choose any of them randomly*/
 		srand(time(NULL));	// initialize random seed:
 		size_t random = rand() % maxDegreePositionInList.size();
-		random = 0;			//Remporary to choose only the first of the list
+		random = 0;			//Temporary to choose only the first of the list
 		return maxDegreePositionInList[random];
 	}
 
@@ -183,9 +181,11 @@ public:
 		this->vertexDegree = src.vertexDegree;
 	}
 
-	/*~GraphHandler()
-	{
-	}*/
+	~GraphHandler() {
+		//printf("DESTROY %p \n", this);
+	}
+
+
 
 };
 
