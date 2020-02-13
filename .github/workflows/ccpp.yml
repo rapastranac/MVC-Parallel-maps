@@ -1,4 +1,4 @@
-name: C/C++ Windows
+name: C/C++
 
 on:
   push:
@@ -7,8 +7,10 @@ on:
 
 jobs:
   build:
-
-    runs-on: windows-latest
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: [ubuntu-latest, windows-latest]
    
     steps:
     - uses: actions/checkout@v2
