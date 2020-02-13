@@ -13,6 +13,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: make
-      run: a.out
+      run: ./a.out
     - name: Install Dependencies
       run: npm install
