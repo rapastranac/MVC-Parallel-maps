@@ -15,3 +15,4 @@ jobs:
     steps:
     - name: Setup C++ environment
       uses: kurocha/setup-cpp@v1
+      run: ./a.out
