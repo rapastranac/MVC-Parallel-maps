@@ -31,9 +31,7 @@ int main()
 
 	Gr.readGraph("List - 80.txt", "Input/"); //it depends where the Makefile is located
 
-	//clock_t begin = clock();
 	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-	//VCMin = Gr.makeBranchingCall(MVC, 0, Gr, Visited, 0);
 	try {
 		VCMin = MVC(0, Gr, Visited, 0);    /*minimum vertex cover*/
 	}
@@ -42,7 +40,6 @@ int main()
 		cout << "An exception occurred. Exception Nr. " << e << '\n';
 	}
 	cout << "DONE!" << endl;
-	//clock_t end = clock();
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 	double elapsed_secs = std::chrono::duration_cast<std::chrono::seconds>(end - begin).count();
 
