@@ -8,12 +8,11 @@ on:
 jobs:
   build:
 
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [windows-latest]
-    
+    runs-on: windows-latest
+   
     steps:
     - uses: actions/checkout@v2
     - name: make
       run: program.exe
+    - name: Install Dependencies
+      run: npm install
