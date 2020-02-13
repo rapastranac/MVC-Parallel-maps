@@ -22,6 +22,7 @@ private:
 	ParBranchHandler()
 	{
 		numThreads = 0;
+		SetMaxThreads(numThreads);
 	}
 	~ParBranchHandler() = default;
 	ParBranchHandler(const ParBranchHandler&) = delete;

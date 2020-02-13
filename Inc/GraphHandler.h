@@ -165,7 +165,7 @@ public:
 			it will choose any of them randomly*/
 		srand(time(NULL));	// initialize random seed:
 		size_t random = rand() % maxDegreePositionInList.size();
-		random = 0;			//Temporary to choose only the first of the list
+		//random = 0;			//Temporary to choose only the first of the list
 		return maxDegreePositionInList[random];
 	}
 
