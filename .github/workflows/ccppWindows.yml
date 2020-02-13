@@ -1,0 +1,19 @@
+name: C/C++ Windows
+
+on:
+  push:
+    branches: 
+      - master
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest]
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: make
+      run: ./program.exe
