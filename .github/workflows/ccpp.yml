@@ -17,4 +17,5 @@ jobs:
       uses: kurocha/setup-cpp@v1
     - name: make
       run: make
+    - name: run executable
           ./a.out
