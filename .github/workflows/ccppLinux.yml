@@ -1,2 +1,0 @@
-- name: Setup Go for use with actions
-  uses: actions/setup-go@v1.0.0
