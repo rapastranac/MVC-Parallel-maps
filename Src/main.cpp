@@ -1,4 +1,4 @@
-#include <ctime>
+#include <chrono>
 #include <iostream>
 #include <list>
 #include <mutex>
@@ -31,7 +31,8 @@ int main()
 
 	Gr.readGraph("List - 80.txt", "Input/"); //it depends where the Makefile is located
 
-	clock_t begin = clock();
+	//clock_t begin = clock();
+	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 	//VCMin = Gr.makeBranchingCall(MVC, 0, Gr, Visited, 0);
 	try {
 		VCMin = MVC(0, Gr, Visited, 0);    /*minimum vertex cover*/
@@ -41,26 +42,26 @@ int main()
 		cout << "An exception occurred. Exception Nr. " << e << '\n';
 	}
 	cout << "DONE!" << endl;
-	clock_t end = clock();
-	double elapsed_secs = ((double)end - (double)begin) / CLOCKS_PER_SEC;
+	//clock_t end = clock();
+	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+	double elapsed_secs = std::chrono::duration_cast<std::chrono::seconds>(end - begin).count();
 
-	printResults(VCMin, elapsed_secs, Gr);	//Printing the minimum vertex cover
-
+	printResults(VCMin, elapsed_secs);	//Printing the minimum vertex cover
 
 	return 0;
 }
 
-void printResults(std::vector<size_t>& VCMin, double elapsed_secs, GraphHandler& Gr)
+void printResults(std::vector<size_t>& VCMin, double elapsed_secs)
 {
 	size_t sizemvc = VCMin.size();
 	printf("---------------------------------------------------------- \n");
 	printf("Minimum vertex cover is: ");
-	for (int i = 0; i < VCMin.size(); i++) cout << VCMin[i] << "\t";
+	for (size_t i = 0; i < VCMin.size(); i++) cout << VCMin[i] << "\t";
 	printf("\n");
-	printf("Size: %u \n", sizemvc);
+	printf("Size: %zu \n", sizemvc);
 	printf("Elapsed time : %f \n", elapsed_secs);
-	printf("Number of leaves : %u \n", GraphHandler::leaves);
-	printf("Maximum depth reached : %u \n", GraphHandler::measured_Depth);
+	printf("Number of leaves : %zu \n", GraphHandler::leaves);
+	printf("Maximum depth reached : %zu \n", GraphHandler::measured_Depth);
 	printf("---------------------------------------------------------- \n");
 	//system("pause");
 }
