@@ -61,5 +61,4 @@ void printResults(std::vector<size_t>& VCMin, double elapsed_secs, GraphHandler 
 	printf("Number of leaves : %zu \n", GraphHandler::leaves);
 	printf("Maximum depth reached : %zu \n", GraphHandler::measured_Depth);
 	printf("---------------------------------------------------------- \n");
-	//system("pause");
 }
