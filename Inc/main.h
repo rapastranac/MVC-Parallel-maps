@@ -14,5 +14,5 @@ std::vector<size_t> MVC(int, GraphHandler&, std::vector<size_t>&, size_t);
 
 const std::vector<size_t>& returnFunction(std::vector<size_t>& VC1, std::vector<size_t>& VC2);
 
-void printResults(std::vector<size_t>&, double);
+void printResults(std::vector<size_t>&, double, GraphHandler&);
 #endif

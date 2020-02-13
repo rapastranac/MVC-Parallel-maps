@@ -43,18 +43,19 @@ int main()
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 	double elapsed_secs = std::chrono::duration_cast<std::chrono::seconds>(end - begin).count();
 
-	printResults(VCMin, elapsed_secs);	//Printing the minimum vertex cover
+	printResults(VCMin, elapsed_secs, Gr);	//Printing the minimum vertex cover
 
 	return 0;
 }
 
-void printResults(std::vector<size_t>& VCMin, double elapsed_secs)
+void printResults(std::vector<size_t>& VCMin, double elapsed_secs, GraphHandler & Gr)
 {
 	size_t sizemvc = VCMin.size();
 	printf("---------------------------------------------------------- \n");
 	printf("Minimum vertex cover is: ");
 	for (size_t i = 0; i < VCMin.size(); i++) cout << VCMin[i] << "\t";
 	printf("\n");
+	printf("Initial graph size: %zu\n", Gr.getGraphSize());
 	printf("Size: %zu \n", sizemvc);
 	printf("Elapsed time : %f \n", elapsed_secs);
 	printf("Number of leaves : %zu \n", GraphHandler::leaves);
