@@ -22,7 +22,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp $(DEPS)
 	$(CXX)  -c -o $@ $< $(FLAGS)
 
 program: $(OBJS)
-	$(CXX)  $(THREADS) -o $@ $^ $(FLAGS) $(LIBS)
+	$(CXX)  $(THREADS) -o $@ $^ $(FLAGS) $(LIBS) $(EXN)
 
 .PHONY: clean
 
